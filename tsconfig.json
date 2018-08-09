@@ -1,0 +1,24 @@
+{
+  "include": [
+    "src/**/*",
+    "typings/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "es5",
+      "es2015"
+    ],
+    "sourceMap": true,
+    "pretty": true
+  }
+}
