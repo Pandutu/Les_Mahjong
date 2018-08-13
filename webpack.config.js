@@ -1,6 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
 
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 /*
  * SplitChunksPlugin is enabled by default and replaced
  * deprecated CommonsChunkPlugin. It automatically identifies modules which
@@ -22,7 +26,6 @@ const path = require('path');
  *
  */
 
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
 	module: {
@@ -45,17 +48,22 @@ module.exports = {
 				},
 
 				test: /\.js$/
+			},
+
+			{
+				include: [path.resolve(__dirname, 'src')],
+				loader: 'awesome-typescript-loader',
+				test: /\.ts$/
 			}
 		]
 	},
 
 	entry: {
-		app: './src/app.js',
-		vendor: './src/vendor.js'
+		game: path.resolve(__dirname, 'src', 'game.js'),
 	},
 
 	output: {
-		filename: '[name].[chunkhash].js',
+		filename: '[name].js',
 		path: path.resolve(__dirname, 'dist')
 	},
 
@@ -75,5 +83,26 @@ module.exports = {
 			minSize: 30000,
 			name: true
 		}
-	}
+	},
+
+	plugins: [
+		/*
+		new HtmlWebpackPlugin({
+			path: path.resolve(__dirname, 'build', 'index.html'),
+			template: 'index.html'
+		}),
+		*/
+		new CopyWebpackPlugin([{
+			from: path.resolve(__dirname, 'assets'),
+			to: path.resolve(__dirname, 'dist', 'assets'),
+		}, {
+			from: path.resolve(__dirname, 'favicon.ico'),
+			to: path.resolve(__dirname, 'dist', 'favicon.ico')
+		}, {
+			from: path.resolve(__dirname, 'config'),
+			to: path.resolve(__dirname, 'dist')
+		}]),
+
+		new CleanWebpackPlugin('dist')
+	]
 };
